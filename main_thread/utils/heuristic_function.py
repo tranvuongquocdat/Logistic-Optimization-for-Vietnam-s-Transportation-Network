@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from data.provinces_infor import *
-from distance_function import haversine_distance
+from utils.distance_function import haversine_distance
 from typing import Dict, List, Tuple
 
 # List of provinces with airports (assumed)
@@ -28,6 +28,7 @@ def heuristic(current_province: str, goal_province: str, cost_priority: float = 
     Returns:
         Minimum heuristic value
     """
+    # print("cost priority: ", cost_priority)
     current_lat, current_lon = coordinates[current_province]
     goal_lat, goal_lon = coordinates[goal_province]
     distance = haversine_distance(current_lat, current_lon, goal_lat, goal_lon)
