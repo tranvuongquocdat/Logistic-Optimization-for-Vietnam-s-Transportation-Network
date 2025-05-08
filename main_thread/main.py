@@ -61,11 +61,34 @@ def display_results(result, start_province, end_province):
     if result and 'path' in result and result['path']:
         # Display path information
         st.write("**Đường đi tối ưu:**", " -> ".join(result['path']))
-        st.write("**Tổng chi phí:**", round(result['cost'], 2))
         
-        # Display transport information
+        # Display time and cost information
+        col1, col2 = st.columns(2)
+        with col1:
+            st.write("**Tổng chi phí:**", f"{round(result['cost'] * 1000, 2):,} VND")
+        with col2:
+            # Calculate time in hours and minutes
+            total_hours = int(result['time'])
+            total_minutes = int((result['time'] - total_hours) * 60)
+            st.write("**Tổng thời gian:**", f"{total_hours} giờ {total_minutes} phút")
+        
+        # Display detailed information for each segment
+        st.subheader("Chi tiết từng đoạn đường")
+        
         for transport in result['transport_details']:
-            st.write(f"Đi từ {transport['from']} đến {transport['to']} bằng {'máy bay' if transport['type'] == 'fly' else 'đường bộ'}")
+            transport_type = 'máy bay' if transport['type'] == 'fly' else 'đường bộ'
+            hours = int(transport['time'])
+            minutes = int((transport['time'] - hours) * 60)
+            
+            st.write(f"**{transport['from']} → {transport['to']} ({transport_type}):**")
+            cols = st.columns(3)
+            with cols[0]:
+                st.write(f"Khoảng cách: {round(transport['distance'], 2)} km")
+            with cols[1]:
+                st.write(f"Thời gian: {hours} giờ {minutes} phút")
+            with cols[2]:
+                st.write(f"Chi phí: {round(transport['cost'], 2):,} VND")
+            st.markdown("---")
         
         # Visualize the path on a map
         visualize_path_on_map(result['path'], result['transport_details'])

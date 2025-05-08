@@ -106,10 +106,18 @@ def ucs(start_province: str, goal_province: str, cost_priority: float = 0.5):
             
             # Thu thập đường đi và phương tiện
             transport_types = []
+            path = []
+            temp_node = current_node
             while temp_node:
                 path.append(temp_node.name)
-                if hasattr(temp_node, 'transport_type'):
-                    transport_types.append(temp_node.transport_type)
+                if temp_node.parent:  # Kiểm tra xem có nút cha hay không
+                    current_province = temp_node.name
+                    parent_province = temp_node.parent.name
+                    # Nếu cả hai tỉnh đều có sân bay, chọn đường bay
+                    if current_province in AIRPORTS and parent_province in AIRPORTS:
+                        transport_types.append("fly")
+                    else:
+                        transport_types.append("road")
                 temp_node = temp_node.parent
             
             transport_types.reverse()
