@@ -18,18 +18,56 @@ from data.provinces_infor import provinces, coordinates
 def main():
     st.title("Tối ưu hóa Logistics cho mạng lưới giao thông Việt Nam")
     
+    # Initialize session state for destination selection
+    if 'start_province' not in st.session_state:
+        st.session_state.start_province = provinces[0]
+    if 'end_province' not in st.session_state:
+        # Set default end province to TP Hồ Chí Minh
+        st.session_state.end_province = "TP Hồ Chí Minh"
+    
     # Sidebar for algorithm selection and parameters
     st.sidebar.header("Cài đặt")
     
     # Algorithm selection
     algorithm = st.sidebar.selectbox(
         "Chọn thuật toán",
-        ["UCS (Uniform Cost Search)", "A* (A-Star)"]
+        ["UCS (Uniform Cost Search)", "A* (A-Star)"],
+        key="algorithm_selection"
     )
     
+    # Start province selection with callback to update valid destinations
+    def on_start_change():
+        # Only update end_province if it's the same as start_province
+        if st.session_state.end_province == st.session_state.start_province:
+            # If start is TP Hồ Chí Minh, set end to Hà Nội
+            if st.session_state.start_province == "TP Hồ Chí Minh":
+                st.session_state.end_province = "Hà Nội"
+            # If start is Hà Nội, set end to TP Hồ Chí Minh
+            elif st.session_state.start_province == "Hà Nội":
+                st.session_state.end_province = "TP Hồ Chí Minh"
+            # Otherwise find first province that's different from start
+            else:
+                for p in provinces:
+                    if p != st.session_state.start_province:
+                        st.session_state.end_province = p
+                        break
+    
     # Start and destination selection
-    start_province = st.sidebar.selectbox("Địa điểm xuất phát", provinces)
-    end_province = st.sidebar.selectbox("Địa điểm đích", [p for p in provinces if p != start_province])
+    start_province = st.sidebar.selectbox(
+        "Địa điểm xuất phát", 
+        provinces,
+        key="start_province",
+        on_change=on_start_change
+    )
+    
+    # Filter end provinces to exclude start province
+    valid_end_provinces = [p for p in provinces if p != start_province]
+    
+    end_province = st.sidebar.selectbox(
+        "Địa điểm đích", 
+        valid_end_provinces,
+        key="end_province"
+    )
     
     # Cost priority slider
     cost_priority = st.sidebar.slider(
@@ -37,7 +75,8 @@ def main():
         min_value=0.0, 
         max_value=1.0, 
         value=0.5, 
-        help="0: Ưu tiên thời gian, 1: Ưu tiên chi phí"
+        help="0: Ưu tiên thời gian, 1: Ưu tiên chi phí",
+        key="cost_priority"
     )
     
     # Button to run algorithm
@@ -71,6 +110,9 @@ def display_results(result, start_province, end_province):
             total_hours = int(result['time'])
             total_minutes = int((result['time'] - total_hours) * 60)
             st.write("**Tổng thời gian:**", f"{total_hours} giờ {total_minutes} phút")
+
+        # Visualize the path on a map
+        visualize_path_on_map(result['path'], result['transport_details'])
         
         # Display detailed information for each segment
         st.subheader("Chi tiết từng đoạn đường")
@@ -87,11 +129,10 @@ def display_results(result, start_province, end_province):
             with cols[1]:
                 st.write(f"Thời gian: {hours} giờ {minutes} phút")
             with cols[2]:
-                st.write(f"Chi phí: {round(transport['cost'], 2):,} VND")
+                st.write(f"Chi phí: {round(transport['cost'] * 1000, 2):,} VND")
             st.markdown("---")
         
-        # Visualize the path on a map
-        visualize_path_on_map(result['path'], result['transport_details'])
+        
     else:
         st.error("Không tìm thấy đường đi giữa hai địa điểm này.")
 
