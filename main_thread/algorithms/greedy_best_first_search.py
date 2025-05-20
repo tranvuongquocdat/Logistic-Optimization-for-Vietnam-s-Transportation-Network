@@ -42,6 +42,7 @@ def evaluate_path(path, cost_priority):
 def greedy_best_first_search(
     start_province: str, goal_province: str, cost_priority: float = 0.5
 ):
+    print("Đường đi từ: ", start_province, " đến: ", goal_province)
     provinces, road_segments = build_graph_from_province_data()
     cost_priority = max(0.0, min(1.0, cost_priority))
 
@@ -62,8 +63,17 @@ def greedy_best_first_search(
     start_node.is_in_open_set = True
 
     flights = {}
+    
+    # Thêm biến đếm số bước và không gian tìm kiếm tối đa
+    iterations = 0
+    max_iterations = 10000
+    max_space = 0
+    closed_set_size = 0
+    closed_set = []
 
-    while not open_set.empty():
+    while not open_set.empty() and iterations < max_iterations:
+        iterations += 1
+        
         _, _, current = open_set.get()
         current.is_in_open_set = False
 
@@ -81,9 +91,20 @@ def greedy_best_first_search(
                 node = node.parent
             path.reverse()
             transport_info.reverse()
+            
+            print("Thuật toán Greedy Best First Search")
+            print("Tìm thấy đường sau: ", iterations, " steps")
+            print("Đường đi: ", path)
+            print("Max space: ", max_space)
+            
             return path, evaluate_path(path, cost_priority), transport_info
 
         current.is_in_closed_set = True
+        closed_set.append(current.name)
+        closed_set_size += 1
+        
+        if open_set.qsize() + closed_set_size > max_space:
+            max_space = open_set.qsize() + closed_set_size
 
         for nb_name in provinces[current.name].neighbors:
             if nb_name not in provinces:
@@ -111,6 +132,10 @@ def greedy_best_first_search(
                     nb.h_x = heuristic(dest, goal_province, cost_priority)
                     open_set.put((nb.h_x, random.random(), nb))
                     nb.is_in_open_set = True
+                    
+        # Cập nhật max space
+        if open_set.qsize() + len(provinces) > max_space:
+            max_space = open_set.qsize() + len(provinces)
 
     return [], float("inf"), []
 

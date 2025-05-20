@@ -65,6 +65,8 @@ def ant_colony_optimization(
     Q: float = 100.0,
     max_steps: int = 100,
 ):
+    print("Đường đi từ: ", start_province, " đến: ", goal_province)
+    
     # Build graph
     provinces, road_segments = build_graph_from_province_data()
     cost_priority = max(0.0, min(1.0, cost_priority))
@@ -137,18 +139,30 @@ def ant_colony_optimization(
 
     best_path = None
     best_value = float("inf")
+    
+    # Thêm biến đếm số bước và không gian tìm kiếm tối đa
+    total_iterations = 0
+    max_space = 0
+    total_ants = 0
 
     # Main ACO loop
-    for _ in range(num_iterations):
+    for iteration in range(num_iterations):
         iteration_best_path = None
         iteration_best_value = float("inf")
         iteration_edges = []
+        
+        # Theo dõi số lượng kiến trong mỗi vòng lặp
+        iteration_ants = 0
 
         for _ in range(num_ants):
             path = [start_province]
             visited = {start_province}
             total_value = 0.0
             steps = 0
+            
+            # Mỗi kiến là một lần thử nghiệm
+            total_ants += 1
+            iteration_ants += 1
 
             while path[-1] != goal_province and steps < max_steps:
                 current = path[-1]
@@ -163,6 +177,9 @@ def ant_colony_optimization(
                 visited.add(edge["to"])
                 total_value += edge["value"]
                 steps += 1
+                
+                # Mỗi bước của kiến cũng là một bước tính toán
+                total_iterations += 1
 
             if path[-1] == goal_province and total_value < iteration_best_value:
                 iteration_best_value = total_value
@@ -171,6 +188,12 @@ def ant_colony_optimization(
                     (iteration_best_path[i], iteration_best_path[i + 1])
                     for i in range(len(iteration_best_path) - 1)
                 ]
+        
+        # Cập nhật max_space - không gian tìm kiếm tối đa
+        # Trong ACO, không gian tìm kiếm có thể được đo bằng số lượng kiến * số lượng tỉnh
+        current_space = iteration_ants * len(provinces)
+        if current_space > max_space:
+            max_space = current_space
 
         # Global pheromone update: evaporation
         for u in adjacency:
@@ -198,6 +221,11 @@ def ant_colony_optimization(
             # find edge type
             typ = next(e["type"] for e in adjacency[u] if e["to"] == v)
             transport_info.append((u, v, typ))
+    
+    print("Thuật toán Ant Colony Optimization")
+    print("Tìm thấy đường sau: ", total_iterations, " steps")
+    print("Đường đi: ", best_path)
+    print("Max space: ", max_space)
 
     return best_path or [], best_value, transport_info
 
