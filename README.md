@@ -76,11 +76,4 @@ main_thread/
 └── utils/                  # Helper utilities
 
 ```
-
-## Authors
-
-- Your Name
-
-## License
-
-MIT 
+ 
