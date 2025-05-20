@@ -15,6 +15,10 @@ from algorithms.UCS import ucs, build_graph_from_province_data, calculate_transp
 from algorithms.a_star import a_star, calculate_transport_options
 from data.provinces_infor import provinces, coordinates
 
+#turn of warning
+import warnings
+warnings.filterwarnings("ignore")
+
 def main():
     st.title("Tối ưu hóa Logistics cho mạng lưới giao thông Việt Nam")
     

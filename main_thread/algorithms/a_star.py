@@ -44,6 +44,7 @@ def build_graph_from_province_data():
     return provinces, road_segments
 
 def a_star(start_province: str, goal_province: str, cost_priority: float = 0.5):
+    print("Đường đi từ: ", start_province, " đến: ", goal_province)
     """
     Thuật toán A* tìm đường đi tối ưu giữa hai tỉnh/thành
     
@@ -91,6 +92,9 @@ def a_star(start_province: str, goal_province: str, cost_priority: float = 0.5):
     # Giới hạn số lần lặp để tránh vòng lặp vô hạn
     max_iterations = 10000
     iterations = 0
+    max_space = 0
+    closed_set_size = 0
+    closed_set = []
     
     while not open_set.empty() and iterations < max_iterations:
         iterations += 1
@@ -129,12 +133,22 @@ def a_star(start_province: str, goal_province: str, cost_priority: float = 0.5):
             for i in range(1, len(path)):
                 trans_type = transport_types[i-1] if i-1 < len(transport_types) else "road"
                 transport_info.append((path[i-1], path[i], trans_type))
+
+            print("Thuật toán A*")
+            print("Tìm thấy đường sau: ", iterations, " steps")
+            print("Đường đi: ", path)
+            print("Max space: ", max_space)
             
             return path, current_node.g_x, transport_info
         
         # Đánh dấu nút hiện tại đã được thăm
         current_node.is_in_closed_set = True
-        
+        closed_set.append(current_name)
+        closed_set_size += 1
+
+        if open_set.qsize() + closed_set_size > max_space:
+            max_space = open_set.qsize() + closed_set_size
+
         # 1. Xét các kết nối đường bộ thông thường
         for neighbor_name in provinces[current_name].neighbors:
             if neighbor_name not in provinces:
@@ -223,6 +237,10 @@ def a_star(start_province: str, goal_province: str, cost_priority: float = 0.5):
                     if not airport_node.is_in_open_set:
                         open_set.put((airport_node.f_x, random.random(), airport_node))
                         airport_node.is_in_open_set = True
+
+        #space = tổng trong openset + closedset
+        if open_set.qsize() + len(provinces) > max_space:
+            max_space = open_set.qsize() + len(provinces)
     
     # Không tìm thấy đường đi
     return [], float('inf'), []

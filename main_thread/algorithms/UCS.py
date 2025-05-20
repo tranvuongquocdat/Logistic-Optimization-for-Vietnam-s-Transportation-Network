@@ -45,6 +45,7 @@ def build_graph_from_province_data():
     return provinces, road_segments
 
 def ucs(start_province: str, goal_province: str, cost_priority: float = 0.5):
+    print("Đường đi từ: ", start_province, " đến: ", goal_province)
     """
     Thuật toán UCS (Uniform Cost Search) tìm đường đi tối ưu giữa hai tỉnh/thành
     
@@ -90,6 +91,9 @@ def ucs(start_province: str, goal_province: str, cost_priority: float = 0.5):
     # Giới hạn số lần lặp để tránh vòng lặp vô hạn
     max_iterations = 10000
     iterations = 0
+    max_space = 0
+    closed_set_size = 0
+    closed_set = []
     
     while not open_set.empty() and iterations < max_iterations:
         iterations += 1
@@ -128,12 +132,22 @@ def ucs(start_province: str, goal_province: str, cost_priority: float = 0.5):
             for i in range(1, len(path)):
                 trans_type = transport_types[i-1] if i-1 < len(transport_types) else "road"
                 transport_info.append((path[i-1], path[i], trans_type))
+
+            print("Thuật toán UCS")
+            print("Tìm thấy đường sau: ", iterations, " steps")
+            print("Đường đi: ", path)
+            print("Max space: ", max_space)
             
             return path, current_node.g_x, transport_info
         
         # Đánh dấu nút hiện tại đã được thăm
         current_node.is_in_closed_set = True
-        
+        closed_set.append(current_name)
+        closed_set_size += 1
+
+        if open_set.qsize() + closed_set_size > max_space:
+            max_space = open_set.qsize() + closed_set_size
+
         # 1. Xét các kết nối đường bộ thông thường
         for neighbor_name in provinces[current_name].neighbors:
             if neighbor_name not in provinces:
