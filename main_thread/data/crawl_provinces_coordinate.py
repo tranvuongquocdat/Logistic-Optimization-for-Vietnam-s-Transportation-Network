@@ -8,7 +8,7 @@ BASE_URL = "https://nominatim.openstreetmap.org/search"
 
 # Danh sách 63 tỉnh thành Việt Nam
 provinces = [
-    "Hà Nội", "TP Hồ Chí Minh", "Hải Phòng", "Đà Nẵng", "Cần Thơ", "Hà Giang", "Cao Bằng",
+    "Hà Nội", "TP Hồ Chí Minh", "Hải Phòng", "Điện Biên", "Đà Nẵng", "Cần Thơ", "Hà Giang", "Cao Bằng",
     "Lai Châu", "Lào Cai", "Tuyên Quang", "Lạng Sơn", "Bắc Kạn", "Thái Nguyên", "Yên Bái",
     "Sơn La", "Phú Thọ", "Vĩnh Phúc", "Quảng Ninh", "Bắc Giang", "Bắc Ninh", "Hải Dương",
     "Hưng Yên", "Hòa Bình", "Hà Nam", "Nam Định", "Thái Bình", "Ninh Bình", "Thanh Hóa",

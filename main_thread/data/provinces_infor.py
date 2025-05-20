@@ -6,6 +6,7 @@ coordinates = {
     "Hà Nội": (21.0283334, 105.854041),
     "TP Hồ Chí Minh": (10.7763897, 106.7011391),
     "Hải Phòng": (20.858864, 106.6749591),
+    "Điện Biên": (21.6546566,103.2168632),
     "Đà Nẵng": (16.068, 108.212),
     "Cần Thơ": (10.0364634, 105.7875821),
     "Hà Giang": (22.7336097, 105.0027271),
@@ -78,7 +79,7 @@ provinces = [
     "Gia Lai", "Đắk Lắk", "Đắk Nông", "Lâm Đồng", "Bình Phước", "Tây Ninh", "Bình Dương",
     "Đồng Nai", "Bà Rịa - Vũng Tàu", "Long An", "Tiền Giang", "Bến Tre", "Trà Vinh",
     "Vĩnh Long", "Đồng Tháp", "An Giang", "Kiên Giang", "Hậu Giang", "Sóc Trăng",
-    "Bạc Liêu", "Cà Mau"
+    "Bạc Liêu", "Cà Mau", "Điện Biên"
 ]
 
 # Dictionary of province neighbors with diacritics
