@@ -266,6 +266,3 @@ def calculate_transport_options_aco(
     )
     return result
 
-def calculate_transport_options_aco(start: str, goal: str, cost_priority: float = 0.5):
-    result = calculate_transport_options_aco(start, goal, cost_priority)
-    return result

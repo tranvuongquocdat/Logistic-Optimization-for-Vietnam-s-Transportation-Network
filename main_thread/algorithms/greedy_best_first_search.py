@@ -168,6 +168,3 @@ def calculate_transport_options_greedy(
     result["heuristic_value"] = heuristic(start, goal, cost_priority)
     return result
 
-def calculate_transport_options_greedy(start: str, goal: str, cost_priority: float = 0.5):
-    result = calculate_transport_options_greedy(start, goal, cost_priority)
-    return result
