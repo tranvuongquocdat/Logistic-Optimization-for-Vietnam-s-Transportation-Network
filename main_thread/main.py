@@ -13,6 +13,7 @@ from matplotlib.colors import to_rgba
 # Import algorithms
 from algorithms.UCS import ucs, build_graph_from_province_data, calculate_transport_options_ucs
 from algorithms.a_star import a_star, calculate_transport_options
+from algorithms.floyd_warshall import floyd_warshall, calculate_transport_options_floyd_warshall
 from data.provinces_infor import provinces, coordinates
 
 #turn of warning
@@ -35,7 +36,7 @@ def main():
     # Algorithm selection
     algorithm = st.sidebar.selectbox(
         "Chọn thuật toán",
-        ["UCS (Uniform Cost Search)", "A* (A-Star)"],
+        ["UCS (Uniform Cost Search)", "A* (A-Star)", "Floyd-Warshall"],
         key="algorithm_selection"
     )
     
@@ -93,11 +94,17 @@ def main():
             st.subheader("Kết quả tìm đường với UCS")
             display_results(result, start_province, end_province)
             
-        else:  # A*
+        elif algorithm == "A* (A-Star)":  # A*
             # Run A* algorithm
             result = calculate_transport_options(start_province, end_province, cost_priority)
             
             st.subheader("Kết quả tìm đường với A*")
+            display_results(result, start_province, end_province)
+
+        elif algorithm == "Floyd-Warshall":
+            result = calculate_transport_options_floyd_warshall(start_province, end_province, cost_priority)
+
+            st.subheader("Kết quả tìm đường với Floyd-Warshall")
             display_results(result, start_province, end_province)
 
 def display_results(result, start_province, end_province):
