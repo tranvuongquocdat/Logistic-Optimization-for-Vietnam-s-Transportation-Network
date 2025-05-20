@@ -14,6 +14,8 @@ from matplotlib.colors import to_rgba
 from algorithms.UCS import ucs, build_graph_from_province_data, calculate_transport_options_ucs
 from algorithms.a_star import a_star, calculate_transport_options
 from algorithms.floyd_warshall import floyd_warshall, calculate_transport_options_floyd_warshall
+from algorithms.ACO import calculate_transport_options_aco
+from algorithms.greedy_best_first_search import calculate_transport_options_greedy
 from data.provinces_infor import provinces, coordinates
 
 #turn of warning
@@ -36,7 +38,7 @@ def main():
     # Algorithm selection
     algorithm = st.sidebar.selectbox(
         "Chọn thuật toán",
-        ["UCS (Uniform Cost Search)", "A* (A-Star)", "Floyd-Warshall"],
+        ["UCS (Uniform Cost Search)", "A* (A-Star)", "Floyd-Warshall", "ACO (Ant Colony Optimization)", "Greedy Best First Search"],
         key="algorithm_selection"
     )
     
@@ -106,6 +108,20 @@ def main():
 
             st.subheader("Kết quả tìm đường với Floyd-Warshall")
             display_results(result, start_province, end_province)
+
+        elif algorithm == "ACO (Ant Colony Optimization)":
+            result = calculate_transport_options_aco(start_province, end_province, cost_priority)
+
+            st.subheader("Kết quả tìm đường với ACO")
+            display_results(result, start_province, end_province)
+
+        elif algorithm == "Greedy Best First Search":
+            result = calculate_transport_options_greedy(start_province, end_province, cost_priority)
+
+            st.subheader("Kết quả tìm đường với Greedy Best First Search")
+            display_results(result, start_province, end_province)
+            
+            
 
 def display_results(result, start_province, end_province):
     if result and 'path' in result and result['path']:
