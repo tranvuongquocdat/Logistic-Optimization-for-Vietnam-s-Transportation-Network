@@ -49,7 +49,7 @@ def floyd_warshall(start: str, goal: str, cost_priority: float = 0.5):
     for (u, v), d in road_segments.items():
         i, j = index[u], index[v]
         time_val = d / ROAD_SPEED + (d // REST_DISTANCE) * REST_TIME
-        cost_val = d * ROAD_COST_PER_KM / 100000
+        cost_val = d * ROAD_COST_PER_KM / 10000
         w = cost_priority * cost_val + (1 - cost_priority) * time_val
         if w < dist[i][j]:
             dist[i][j] = w
@@ -61,7 +61,7 @@ def floyd_warshall(start: str, goal: str, cost_priority: float = 0.5):
     for (u, v), d in flights.items():
         i, j = index[u], index[v]
         time_val = d / AIR_SPEED + STORAGE_TIME
-        cost_val = d * AIR_COST_PER_KM / 100000
+        cost_val = d * AIR_COST_PER_KM / 10000
         w = cost_priority * cost_val + (1 - cost_priority) * time_val
         if w < dist[i][j]:
             dist[i][j] = w
@@ -129,7 +129,7 @@ def floyd_warshall(start: str, goal: str, cost_priority: float = 0.5):
             mode = "fly"
             d = flights[(frm, to)]
             time_val = d / AIR_SPEED + STORAGE_TIME
-            cost_val = d * AIR_COST_PER_KM / 100000
+            cost_val = d * AIR_COST_PER_KM / 10
         else:
             mode = "road"
             if (frm, to) in road_segments:
@@ -143,7 +143,7 @@ def floyd_warshall(start: str, goal: str, cost_priority: float = 0.5):
                 lon_t = coordinates[to][1]
                 d = haversine_distance(lat_f, lon_f, lat_t, lon_t)
             time_val = d / ROAD_SPEED + (d // REST_DISTANCE) * REST_TIME
-            cost_val = d * ROAD_COST_PER_KM / 100000   
+            cost_val = d * ROAD_COST_PER_KM / 10 
         total_dist += d
         total_time += time_val
         total_cost += cost_val

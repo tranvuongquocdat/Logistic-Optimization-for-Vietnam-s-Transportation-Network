@@ -131,7 +131,7 @@ def display_results(result, start_province, end_province):
         # Display time and cost information
         col1, col2 = st.columns(2)
         with col1:
-            st.write("**Tổng chi phí:**", f"{round(result['cost'] * 1000, 2):,} VND")
+            st.write("**Tổng chi phí:**", f"{round(result['cost'], 2):,} VND")
         with col2:
             # Calculate time in hours and minutes
             total_hours = int(result['time'])
@@ -156,7 +156,7 @@ def display_results(result, start_province, end_province):
             with cols[1]:
                 st.write(f"Thời gian: {hours} giờ {minutes} phút")
             with cols[2]:
-                st.write(f"Chi phí: {round(transport['cost'] * 1000, 2):,} VND")
+                st.write(f"Chi phí: {round(transport['cost'], 2):,} VND")
             st.markdown("---")
         
         

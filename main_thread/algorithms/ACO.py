@@ -94,7 +94,7 @@ def ant_colony_optimization(
                     provinces[v].longitude,
                 )
             t = dist / ROAD_SPEED + (dist // REST_DISTANCE) * REST_TIME
-            c = dist * ROAD_COST_PER_KM / 100000
+            c = dist * ROAD_COST_PER_KM / 10000
             value = cost_priority * c + (1 - cost_priority) * t
             eta = 1.0 / value if value > 0 else 1.0
             adjacency[u].append(
@@ -121,7 +121,7 @@ def ant_colony_optimization(
                     provinces[v].longitude,
                 )
                 t = dist / AIR_SPEED + STORAGE_TIME
-                c = dist * AIR_COST_PER_KM / 100000
+                c = dist * AIR_COST_PER_KM / 10000
                 value = cost_priority * c + (1 - cost_priority) * t
                 eta = 1.0 / value if value > 0 else 1.0
                 adjacency[u].append(
@@ -267,7 +267,7 @@ def calculate_transport_options_aco(
                 ),
             )
             tm = dist / ROAD_SPEED + (dist // REST_DISTANCE) * REST_TIME
-            c = dist * ROAD_COST_PER_KM / 100000
+            c = dist * ROAD_COST_PER_KM / 10
         else:
             dist = haversine_distance(
                 provinces[u].latitude,
@@ -276,7 +276,7 @@ def calculate_transport_options_aco(
                 provinces[v].longitude,
             )
             tm = dist / AIR_SPEED + STORAGE_TIME
-            c = dist * AIR_COST_PER_KM / 100000
+            c = dist * AIR_COST_PER_KM / 10
         total_dist += dist
         total_time += tm
         total_cost += c
