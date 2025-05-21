@@ -176,7 +176,7 @@ def ucs(start_province: str, goal_province: str, cost_priority: float = 0.5):
             
             # Tính g_x mới cho đường bộ
             segment_time = (distance / ROAD_SPEED) + (distance // REST_DISTANCE) * REST_TIME
-            segment_cost = distance * ROAD_COST_PER_KM
+            segment_cost = distance * ROAD_COST_PER_KM / 100000
             segment_value = cost_priority * segment_cost + (1 - cost_priority) * segment_time
             tentative_g_x = current_node.g_x + segment_value
             
@@ -220,7 +220,7 @@ def ucs(start_province: str, goal_province: str, cost_priority: float = 0.5):
                 
                 # Tính g_x mới cho đường bay
                 air_time = (air_distance / AIR_SPEED) + STORAGE_TIME
-                air_cost = air_distance * AIR_COST_PER_KM
+                air_cost = air_distance * AIR_COST_PER_KM / 100000
                 air_value = cost_priority * air_cost + (1 - cost_priority) * air_time
                 tentative_g_x = current_node.g_x + air_value
                 
@@ -299,7 +299,7 @@ def calculate_transport_options_ucs(start: str, goal: str, cost_priority: float 
                 
                 # Tính thời gian và chi phí cho đường bộ
                 time = (distance / ROAD_SPEED) + (distance // REST_DISTANCE) * REST_TIME
-                cost = distance * ROAD_COST_PER_KM
+                cost = distance * ROAD_COST_PER_KM / 100000
             else:  # transport_type == "fly"
                 # Tính khoảng cách bay
                 p1_lat, p1_lon = coordinates[from_province]
@@ -308,7 +308,7 @@ def calculate_transport_options_ucs(start: str, goal: str, cost_priority: float 
                 
                 # Tính thời gian và chi phí cho đường bay
                 time = (distance / AIR_SPEED) + STORAGE_TIME
-                cost = distance * AIR_COST_PER_KM
+                cost = distance * AIR_COST_PER_KM / 100000
             
             # Cộng dồn
             total_distance += distance

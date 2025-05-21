@@ -31,10 +31,10 @@ def evaluate_path(path, cost_priority):
             dist = haversine_distance(lat1, lon1, lat2, lon2)
         if u in AIRPORTS and v in AIRPORTS:
             time = dist / AIR_SPEED + STORAGE_TIME
-            cost = dist * AIR_COST_PER_KM
+            cost = dist * AIR_COST_PER_KM / 100000
         else:
             time = dist / ROAD_SPEED + (dist // REST_DISTANCE) * REST_TIME
-            cost = dist * ROAD_COST_PER_KM
+            cost = dist * ROAD_COST_PER_KM / 100000
         total_value += cost_priority * cost + (1 - cost_priority) * time
     return total_value
 
@@ -173,13 +173,13 @@ def calculate_transport_options_greedy(
                 lat2, lon2 = coordinates[to]
                 d = haversine_distance(lat1, lon1, lat2, lon2)
             t = (d / ROAD_SPEED) + (d // REST_DISTANCE) * REST_TIME
-            c = d * ROAD_COST_PER_KM
+            c = d * ROAD_COST_PER_KM / 100000
         else:
             lat1, lon1 = coordinates[frm]
             lat2, lon2 = coordinates[to]
             d = haversine_distance(lat1, lon1, lat2, lon2)
             t = (d / AIR_SPEED) + STORAGE_TIME
-            c = d * AIR_COST_PER_KM
+            c = d * AIR_COST_PER_KM / 100000
         total_dist += d
         total_time += t
         total_cost += c

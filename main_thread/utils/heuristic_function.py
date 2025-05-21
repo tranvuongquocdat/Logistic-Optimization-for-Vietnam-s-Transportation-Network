@@ -12,8 +12,8 @@ AIRPORTS = ["Hà Nội", "TP Hồ Chí Minh", "Đà Nẵng"]
 # Hằng số
 ROAD_SPEED = 50  # km/h
 AIR_SPEED = 800  # km/h
-ROAD_COST_PER_KM = 0.01  # $/km
-AIR_COST_PER_KM = 0.03  # $/km
+ROAD_COST_PER_KM = 1000  # VND/km
+AIR_COST_PER_KM = 3000  # VND/km
 STORAGE_TIME = 2  # giờ
 REST_TIME = 1  # 1 hours rest time per 300 km
 REST_DISTANCE = 300  # km
@@ -45,7 +45,7 @@ def heuristic(current_province: str, goal_province: str, cost_priority: float = 
     road_time = (distance / ROAD_SPEED) + (distance // REST_DISTANCE) * REST_TIME
     if log:
         print("road time: ", road_time)
-    road_cost = distance * ROAD_COST_PER_KM
+    road_cost = distance * ROAD_COST_PER_KM / 100000
     if log:
         print("road cost: ", road_cost)
     road_heuristic = round(cost_priority * road_cost + (1 - cost_priority) * road_time, 2)
@@ -63,7 +63,7 @@ def heuristic(current_province: str, goal_province: str, cost_priority: float = 
         air_time = (distance / AIR_SPEED) + STORAGE_TIME
         if log:
             print("air time: ", air_time)
-        air_cost = distance * AIR_COST_PER_KM
+        air_cost = distance * AIR_COST_PER_KM / 100000
         if log:
             print("air cost: ", air_cost)
         air_heuristic = round(cost_priority * air_cost + (1 - cost_priority) * air_time, 2)
